@@ -170,6 +170,156 @@
       color: #f4f4f4;
     }
 
+    .model-selector {
+      position: relative;
+    }
+
+    .model-button {
+      height: 36px;
+      border: 0;
+      outline: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #f4f4f4;
+      cursor: pointer;
+      padding: 0 8px 0 12px;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 650;
+      white-space: nowrap;
+      transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+    }
+
+    .model-button:hover,
+    .model-button.open {
+      background: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+    }
+
+    .model-button:active {
+      transform: translateY(1px);
+    }
+
+    .model-button svg {
+      width: 18px;
+      height: 18px;
+      opacity: 0.76;
+      transition: transform 180ms ease;
+    }
+
+    .model-button.open svg {
+      transform: rotate(180deg);
+    }
+
+    .model-menu {
+      position: absolute;
+      right: 0;
+      bottom: 46px;
+      width: min(260px, calc(100vw - 36px));
+      display: none;
+      padding: 8px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.085);
+      background: #1f1f1f;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+      z-index: 4;
+    }
+
+    .model-menu.open {
+      display: block;
+      animation: menu-in 140ms ease both;
+    }
+
+    @keyframes menu-in {
+      from {
+        opacity: 0;
+        transform: translateY(5px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .model-option,
+    .more-models {
+      width: 100%;
+      min-height: 58px;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 9px 11px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: background 150ms ease;
+    }
+
+    .model-option:hover,
+    .more-models:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .model-copy {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .model-name {
+      color: #eeeeee;
+      font-size: 13px;
+      font-weight: 720;
+      line-height: 1.15;
+    }
+
+    .model-description {
+      color: #9b9b9b;
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
+    .model-check {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+      color: #5fa7ff;
+      opacity: 0;
+    }
+
+    .model-option.selected .model-check {
+      opacity: 1;
+    }
+
+    .model-divider {
+      height: 1px;
+      margin: 6px 8px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .more-models {
+      min-height: 44px;
+      color: #eeeeee;
+      font-size: 13px;
+      font-weight: 720;
+    }
+
+    .more-models svg {
+      width: 16px;
+      height: 16px;
+      color: #8f8f8f;
+      transform: rotate(-90deg);
+    }
+
     .send-button {
       background: rgba(255, 255, 255, 0.18);
       color: #ffffff;
@@ -387,6 +537,52 @@
               </svg>
             </button>
 
+            <div class="model-selector">
+              <button class="model-button" id="modelButton" type="button" aria-haspopup="true" aria-expanded="false">
+                <span id="selectedModelLabel">Sonnet 4.5</span>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="m7 10 5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+
+              <div class="model-menu" id="modelMenu" role="menu" aria-label="Choose AI model">
+                <button class="model-option" type="button" data-model="Opus 4.5" role="menuitemradio" aria-checked="false">
+                  <span class="model-copy">
+                    <span class="model-name">Opus 4.5</span>
+                    <span class="model-description">Most capable for complex work</span>
+                  </span>
+                  <svg class="model-check" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="m5 12 4 4 10-10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </button>
+                <button class="model-option selected" type="button" data-model="Sonnet 4.5" role="menuitemradio" aria-checked="true">
+                  <span class="model-copy">
+                    <span class="model-name">Sonnet 4.5</span>
+                    <span class="model-description">Best for everyday tasks</span>
+                  </span>
+                  <svg class="model-check" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="m5 12 4 4 10-10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </button>
+                <button class="model-option" type="button" data-model="Haiku 4.5" role="menuitemradio" aria-checked="false">
+                  <span class="model-copy">
+                    <span class="model-name">Haiku 4.5</span>
+                    <span class="model-description">Fastest for quick answers</span>
+                  </span>
+                  <svg class="model-check" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="m5 12 4 4 10-10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </button>
+                <div class="model-divider"></div>
+                <button class="more-models" type="button">
+                  <span>More models</span>
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="m7 10 5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
             <button class="action-button send-button" id="sendButton" type="submit" aria-label="Send message" title="Send message">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
@@ -432,6 +628,10 @@
     const removeFile = document.getElementById("removeFile");
     const toolsButton = document.getElementById("toolsButton");
     const toolMenu = document.getElementById("toolMenu");
+    const modelButton = document.getElementById("modelButton");
+    const modelMenu = document.getElementById("modelMenu");
+    const selectedModelLabel = document.getElementById("selectedModelLabel");
+    const modelOptions = Array.from(document.querySelectorAll(".model-option"));
 
     function resizeTextarea() {
       textarea.style.height = "auto";
@@ -474,12 +674,43 @@
     toolsButton.addEventListener("click", () => {
       const isOpen = toolMenu.classList.toggle("open");
       toolsButton.setAttribute("aria-expanded", String(isOpen));
+      modelMenu.classList.remove("open");
+      modelButton.classList.remove("open");
+      modelButton.setAttribute("aria-expanded", "false");
+    });
+
+    modelButton.addEventListener("click", () => {
+      const isOpen = modelMenu.classList.toggle("open");
+      modelButton.classList.toggle("open", isOpen);
+      modelButton.setAttribute("aria-expanded", String(isOpen));
+      toolMenu.classList.remove("open");
+      toolsButton.setAttribute("aria-expanded", "false");
+    });
+
+    modelOptions.forEach((option) => {
+      option.addEventListener("click", () => {
+        const model = option.dataset.model;
+        selectedModelLabel.textContent = model;
+        modelOptions.forEach((item) => {
+          const selected = item === option;
+          item.classList.toggle("selected", selected);
+          item.setAttribute("aria-checked", String(selected));
+        });
+        modelMenu.classList.remove("open");
+        modelButton.classList.remove("open");
+        modelButton.setAttribute("aria-expanded", "false");
+      });
     });
 
     document.addEventListener("click", (event) => {
       if (!toolMenu.contains(event.target) && !toolsButton.contains(event.target)) {
         toolMenu.classList.remove("open");
         toolsButton.setAttribute("aria-expanded", "false");
+      }
+      if (!modelMenu.contains(event.target) && !modelButton.contains(event.target)) {
+        modelMenu.classList.remove("open");
+        modelButton.classList.remove("open");
+        modelButton.setAttribute("aria-expanded", "false");
       }
     });
 
