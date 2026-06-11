@@ -36,6 +36,57 @@
       color: var(--text);
     }
 
+    body.light-mode {
+      color-scheme: light;
+      --page: #f4f4f1;
+      --panel: #ffffff;
+      --panel-deep: #f0f0ed;
+      --line: rgba(0, 0, 0, 0.1);
+      --line-strong: rgba(0, 0, 0, 0.18);
+      --text: #171717;
+      --muted: #5f6368;
+      --soft: #6f6f6f;
+      --control: rgba(0, 0, 0, 0.06);
+      --control-hover: rgba(0, 0, 0, 0.1);
+      --accent: #171717;
+      --accent-ink: #ffffff;
+      background: #f4f4f1;
+    }
+
+    body.light-mode .app-layout {
+      background:
+        radial-gradient(circle at 62% 7%, rgba(0, 0, 0, 0.055), transparent 30rem),
+        linear-gradient(180deg, #fbfbf8 0%, #f4f4f1 100%);
+    }
+
+    body.light-mode .main-pane {
+      background: transparent;
+    }
+
+    body.light-mode .headline,
+    body.light-mode .assistant-message,
+    body.light-mode .status-line,
+    body.light-mode .thinking-line,
+    body.light-mode .final-message {
+      color: #151515;
+    }
+
+    body.light-mode .composer,
+    body.light-mode .user-bubble {
+      background: #ffffff;
+      color: #151515;
+      box-shadow: 0 20px 54px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    body.light-mode .message-input {
+      color: #151515;
+    }
+
+    body.light-mode .message-input::placeholder,
+    body.light-mode .status-line {
+      color: #666666;
+    }
+
     body {
       min-height: 100vh;
       overflow-x: hidden;
@@ -347,6 +398,9 @@
       margin-top: auto;
       cursor: pointer;
       transition: transform 160ms ease, box-shadow 160ms ease;
+      margin-left: 8px;
+      margin-right: 8px;
+      margin-bottom: 10px;
     }
 
     .announcement-card:hover {
@@ -661,6 +715,33 @@
       padding: 10px 14px 14px;
     }
 
+    .theme-toggle {
+      width: calc(100% - 16px);
+      min-height: 38px;
+      margin: 0 8px 10px;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px;
+      cursor: pointer;
+      font-size: 14px;
+      text-align: left;
+    }
+
+    .theme-toggle:hover {
+      background: #2f2f2f;
+    }
+
+    .theme-toggle svg {
+      width: 17px;
+      height: 17px;
+      flex: 0 0 auto;
+    }
+
     .collapsed-rail {
       display: none;
       min-height: 100vh;
@@ -736,12 +817,266 @@
       padding: 32px 24px;
     }
 
+    .main-pane.chat-active {
+      place-items: stretch;
+      padding: 46px 24px 24px;
+    }
+
     .chat-shell {
       width: min(100%, 920px);
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 34px;
+      transition: min-height 220ms ease, justify-content 220ms ease;
+    }
+
+    .main-pane.chat-active .chat-shell {
+      min-height: calc(100vh - 70px);
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 auto;
+      gap: 24px;
+    }
+
+    .chat-transcript {
+      width: min(100%, 760px);
+      display: none;
+      flex: 1;
+      margin: 0 auto;
+      padding-top: 8px;
+    }
+
+    .main-pane.chat-active .chat-transcript {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .main-pane.chat-active .headline,
+    .main-pane.chat-active .suggestions {
+      display: none;
+    }
+
+    .main-pane.chat-active .composer-wrap {
+      margin-top: auto;
+      margin-bottom: 4px;
+    }
+
+    .main-pane.chat-active .composer {
+      min-height: 50px;
+      border-radius: 999px;
+      padding: 10px 12px;
+      gap: 4px;
+    }
+
+    .main-pane.chat-active .message-input {
+      min-height: 24px;
+      padding: 2px 8px 0;
+    }
+
+    .main-pane.chat-active .composer-actions {
+      min-height: 32px;
+    }
+
+    .user-bubble {
+      max-width: min(520px, 76%);
+      align-self: flex-end;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      padding: 12px 16px;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .assistant-flow {
+      display: grid;
+      gap: 18px;
+      max-width: 760px;
+    }
+
+    .assistant-message,
+    .final-message {
+      color: #ffffff;
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .status-line,
+    .thinking-line {
+      color: #b8b8b8;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .thinking-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      border: 0;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .shining-text {
+      background: linear-gradient(110deg, #6f6f6f, 35%, #ffffff, 50%, #6f6f6f, 75%, #6f6f6f);
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shine-text 2s linear infinite;
+    }
+
+    body.light-mode .shining-text {
+      background-image: linear-gradient(110deg, #8a8a8a, 35%, #111111, 50%, #8a8a8a, 75%, #8a8a8a);
+    }
+
+    @keyframes shine-text {
+      from {
+        background-position: 200% 0;
+      }
+      to {
+        background-position: -200% 0;
+      }
+    }
+
+    .thinking-dots {
+      display: inline-grid;
+      grid-auto-flow: column;
+      gap: 3px;
+    }
+
+    .thinking-dots span {
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: currentColor;
+      opacity: 0.35;
+      animation: dot-pulse 1s infinite ease-in-out;
+    }
+
+    .thinking-dots span:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+
+    .thinking-dots span:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    @keyframes dot-pulse {
+      50% {
+        opacity: 1;
+        transform: translateY(-2px);
+      }
+    }
+
+    .activity-panel {
+      position: fixed;
+      inset: 0 0 0 auto;
+      width: min(360px, 92vw);
+      background: #050505;
+      color: #ffffff;
+      border-left: 1px solid rgba(255, 255, 255, 0.12);
+      transform: translateX(100%);
+      transition: transform 190ms ease;
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .activity-panel.open {
+      transform: translateX(0);
+    }
+
+    .activity-header {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 16px;
+      font-weight: 650;
+    }
+
+    .activity-header span {
+      color: #bdbdbd;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .activity-close {
+      margin-left: auto;
+      width: 32px;
+      height: 32px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .activity-close:hover {
+      background: #1f1f1f;
+    }
+
+    .activity-body {
+      overflow-y: auto;
+      padding: 22px 18px 28px;
+      display: grid;
+      gap: 28px;
+    }
+
+    .activity-section {
+      display: grid;
+      gap: 14px;
+    }
+
+    .activity-section h3 {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.2;
+    }
+
+    .activity-list {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 13px;
+      color: #f3f3f3;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .source-pill {
+      width: fit-content;
+      border-radius: 999px;
+      background: #242424;
+      color: #ffffff;
+      padding: 5px 9px;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    body.light-mode .activity-panel {
+      background: #ffffff;
+      color: #151515;
+      border-left-color: rgba(0, 0, 0, 0.12);
+    }
+
+    body.light-mode .activity-list,
+    body.light-mode .activity-close {
+      color: #151515;
+    }
+
+    body.light-mode .source-pill {
+      background: #ececea;
+      color: #151515;
+    }
     }
 
     .headline {
@@ -1302,6 +1637,22 @@
         </section>
       </div>
 
+      <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v2M12 19v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M3 12h2M19 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/></svg>
+        <span>Light mode</span>
+      </button>
+
+      <div class="announcement-card" id="announcementCard" role="button" tabindex="0" aria-label="Product update">
+        <span class="announcement-ping"></span>
+        <span class="announcement-dot"></span>
+        <p class="announcement-title">E-AI update</p>
+        <p class="announcement-description">Activity view, theme switching, and visible progress updates are now in preview.</p>
+        <div class="announcement-footer">
+          <button type="button" id="dismissAnnouncement">Dismiss</button>
+          <span>Read more</span>
+        </div>
+      </div>
+
       <div class="sidebar-user">
         <div class="user-initials">WA</div>
         <div class="user-copy"><span>Worker A</span></div>
@@ -1314,6 +1665,7 @@
     <main class="main-pane">
       <section class="chat-shell" aria-label="ManualMind chat">
         <h1 class="headline">How Can I Help You</h1>
+        <div class="chat-transcript" id="chatTranscript"></div>
 
     <section class="composer-wrap">
       <form class="composer" id="chatForm">
@@ -1460,6 +1812,27 @@
     </div>
       </section>
     </main>
+
+    <aside class="activity-panel" id="activityPanel" aria-label="E-AI activity">
+      <div class="activity-header">
+        Activity <span id="activityTime">0s</span>
+        <button class="activity-close" id="activityClose" type="button" aria-label="Close activity panel">&times;</button>
+      </div>
+      <div class="activity-body">
+        <section class="activity-section">
+          <h3>Thinking</h3>
+          <ul class="activity-list" id="activitySteps">
+            <li>Waiting for a prompt.</li>
+          </ul>
+        </section>
+        <section class="activity-section">
+          <h3>Sources</h3>
+          <div id="activitySources">
+            <div class="source-pill">ManualMind local index</div>
+          </div>
+        </section>
+      </div>
+    </aside>
   </div>
 
   <script>
@@ -1723,6 +2096,16 @@
     const sidebarReopenButton = document.getElementById("sidebarReopen");
     const collapsedNewChat = document.getElementById("collapsedNewChat");
     const collapsedSearch = document.getElementById("collapsedSearch");
+    const themeToggle = document.getElementById("themeToggle");
+    const announcementCard = document.getElementById("announcementCard");
+    const dismissAnnouncement = document.getElementById("dismissAnnouncement");
+    const mainPane = document.querySelector(".main-pane");
+    const chatTranscript = document.getElementById("chatTranscript");
+    const activityPanel = document.getElementById("activityPanel");
+    const activityClose = document.getElementById("activityClose");
+    const activityTime = document.getElementById("activityTime");
+    const activitySteps = document.getElementById("activitySteps");
+    const activitySources = document.getElementById("activitySources");
     const newChatButton = document.getElementById("newChatButton");
     const chatSearchButton = document.getElementById("chatSearchButton");
     const chatHistoryList = document.getElementById("chatHistoryList");
@@ -1828,6 +2211,91 @@
 
     renderChatHistory();
 
+    themeToggle.addEventListener("click", () => {
+      const light = document.body.classList.toggle("light-mode");
+      themeToggle.setAttribute("aria-pressed", String(light));
+      themeToggle.querySelector("span").textContent = light ? "Dark mode" : "Light mode";
+    });
+
+    announcementCard.addEventListener("click", () => announcementCard.classList.toggle("expanded"));
+    announcementCard.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        announcementCard.classList.toggle("expanded");
+      }
+    });
+    dismissAnnouncement.addEventListener("click", (event) => {
+      event.stopPropagation();
+      announcementCard.style.display = "none";
+    });
+
+    activityClose.addEventListener("click", () => activityPanel.classList.remove("open"));
+
+    function setActivity(seconds, steps, sources) {
+      activityTime.textContent = `${seconds}s`;
+      activitySteps.innerHTML = steps.map((step) => `<li>${step}</li>`).join("");
+      activitySources.innerHTML = sources.map((source) => `<div class="source-pill">${source}</div>`).join("");
+    }
+
+    function escapeHtml(value) {
+      return value.replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      }[char]));
+    }
+
+    function renderAssistantFlow(prompt) {
+      mainPane.classList.add("chat-active");
+      chatTranscript.innerHTML = `
+        <div class="user-bubble">${escapeHtml(prompt)}</div>
+        <div class="assistant-flow">
+          <div class="assistant-message">I’ll interpret your request, check the available context, and turn it into a practical next step.</div>
+          <button class="thinking-line" id="thinkingActivityButton" type="button" aria-label="Open E-AI activity panel">
+            <span class="shining-text">E-AI thinking</span>
+            <span class="thinking-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+          </button>
+          <div class="status-line" id="statusLine">Checking the local project context and recent UI state.</div>
+          <div class="final-message" id="finalMessage" style="display:none;"></div>
+        </div>
+      `;
+
+      setActivity(0, [
+        "Parsed the user message into an intended action.",
+        "Checked the current UI state and available local project context.",
+        "Prepared a concise response path before producing the final answer."
+      ], ["ManualMind local UI", "Current chat state", "Uploaded/source context placeholder"]);
+
+      document.getElementById("thinkingActivityButton").addEventListener("click", () => activityPanel.classList.add("open"));
+
+      setTimeout(() => {
+        document.getElementById("statusLine").textContent = "Found the matching UI components and identified the next action.";
+        setActivity(6, [
+          "Matched the request against existing chat, sidebar, and composer components.",
+          "Selected the relevant visible state to update instead of changing unrelated UI.",
+          "Kept sources limited to the local project and current conversation context."
+        ], ["RAG-Architecture-main/web/index.html", "Current prompt", "ManualMind UI state"]);
+      }, 1100);
+
+      setTimeout(() => {
+        document.getElementById("statusLine").textContent = "Composing the final response.";
+      }, 2100);
+
+      setTimeout(() => {
+        document.getElementById("finalMessage").style.display = "block";
+        document.getElementById("finalMessage").textContent = "Done. I’ve handled the request in the interface preview and kept the workflow ready for backend wiring.";
+        document.getElementById("statusLine").textContent = "Thought for 3s";
+        document.querySelector(".thinking-line").style.display = "none";
+        setActivity(3, [
+          "Completed the visible response sequence.",
+          "Generated a final user-facing answer.",
+          "Activity details are available here without exposing private chain-of-thought."
+        ], ["ManualMind local UI", "Conversation prompt"]);
+      }, 3200);
+    }
+
     const textarea = document.getElementById("messageInput");
     const sendButton = document.getElementById("sendButton");
     const form = document.getElementById("chatForm");
@@ -1927,6 +2395,8 @@
     form.addEventListener("submit", (event) => {
       event.preventDefault();
       if (!textarea.value.trim() && fileInput.files.length === 0) return;
+      const submittedPrompt = textarea.value.trim() || "Uploaded file";
+      renderAssistantFlow(submittedPrompt);
       textarea.value = "";
       fileInput.value = "";
       fileName.textContent = "";
