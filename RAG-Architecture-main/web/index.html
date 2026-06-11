@@ -37,9 +37,341 @@
     }
 
     body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding: 0;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    .app-layout {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 408px minmax(0, 1fr);
+      background:
+        radial-gradient(circle at 62% 7%, rgba(255, 255, 255, 0.075), transparent 30rem),
+        linear-gradient(180deg, #242424 0%, var(--page) 46%, #191919 100%);
+    }
+
+    .sidebar-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 68px 340px;
+      background: #000000;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      border-top-right-radius: 18px;
+      border-bottom-right-radius: 18px;
+      overflow: hidden;
+      box-shadow: 22px 0 80px rgba(0, 0, 0, 0.3);
+      position: relative;
+      z-index: 5;
+    }
+
+    .sidebar-shell.collapsed {
+      grid-template-columns: 68px 0;
+    }
+
+    .sidebar-shell.collapsed .detail-sidebar {
+      width: 0;
+      padding-left: 0;
+      padding-right: 0;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .icon-rail {
+      min-height: 100vh;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 28px 12px 14px;
+      background: #000000;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 26px;
+      margin-bottom: 24px;
+      color: #ffffff;
+    }
+
+    .rail-button {
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 11px;
+      background: transparent;
+      color: #bbbbbb;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 170ms ease, color 170ms ease, transform 170ms ease;
+    }
+
+    .rail-button:hover,
+    .rail-button.active {
+      color: #ffffff;
+      background: #2f2f2f;
+    }
+
+    .rail-button:active {
+      transform: translateY(1px);
+    }
+
+    .rail-button svg,
+    .sidebar-icon {
+      width: 17px;
+      height: 17px;
+      stroke: currentColor;
+    }
+
+    .rail-spacer {
+      flex: 1;
+    }
+
+    .profile-dot {
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+    }
+
+    .detail-sidebar {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding: 32px 18px 18px 16px;
+      background: #000000;
+      color: #ffffff;
+      transition: width 190ms ease, padding 190ms ease, opacity 160ms ease;
+    }
+
+    .sidebar-brand {
+      height: 36px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 16px;
+      font-weight: 650;
+      letter-spacing: 0;
+    }
+
+    .sidebar-brand svg {
+      width: 26px;
+      height: 18px;
+    }
+
+    .sidebar-heading-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+    }
+
+    .sidebar-heading {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 720;
+    }
+
+    .sidebar-collapse {
+      width: 32px;
+      height: 32px;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: #a8a8a8;
       display: grid;
       place-items: center;
-      padding: 32px 18px;
+      cursor: pointer;
+    }
+
+    .sidebar-collapse:hover {
+      background: #1f1f1f;
+      color: #ffffff;
+    }
+
+    .sidebar-collapse svg {
+      width: 16px;
+      height: 16px;
+      transform: rotate(-90deg);
+    }
+
+    .sidebar-search {
+      height: 42px;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px;
+      color: #ffffff;
+      background: #000000;
+    }
+
+    .sidebar-search:focus-within {
+      border-color: rgba(255, 255, 255, 0.32);
+    }
+
+    .sidebar-search svg {
+      width: 17px;
+      height: 17px;
+      flex: 0 0 auto;
+    }
+
+    .sidebar-search input {
+      min-width: 0;
+      flex: 1;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: #ffffff;
+      font-size: 14px;
+    }
+
+    .sidebar-search input::placeholder {
+      color: #a8a8a8;
+    }
+
+    .sidebar-content {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      padding-right: 2px;
+      scrollbar-width: thin;
+      scrollbar-color: #2f2f2f transparent;
+    }
+
+    .sidebar-section {
+      margin-bottom: 28px;
+    }
+
+    .sidebar-section-title {
+      color: #9a9a9a;
+      font-size: 14px;
+      line-height: 20px;
+      margin: 0 0 12px;
+      padding-left: 16px;
+    }
+
+    .sidebar-item,
+    .sidebar-subitem {
+      width: 100%;
+      min-height: 42px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 14px 0 16px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 160ms ease, color 160ms ease;
+    }
+
+    .sidebar-item:hover,
+    .sidebar-item.selected,
+    .sidebar-subitem:hover {
+      background: #1f1f1f;
+    }
+
+    .sidebar-item svg:first-child,
+    .sidebar-subitem svg:first-child {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+    }
+
+    .item-label {
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .chevron {
+      width: 15px;
+      height: 15px;
+      transition: transform 170ms ease;
+    }
+
+    .sidebar-item.expanded .chevron {
+      transform: rotate(180deg);
+    }
+
+    .submenu {
+      display: none;
+      padding: 2px 0 7px 30px;
+    }
+
+    .submenu.open {
+      display: block;
+    }
+
+    .sidebar-subitem {
+      color: #cfcfcf;
+      min-height: 36px;
+      padding-left: 14px;
+      font-size: 13px;
+    }
+
+    .sidebar-footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      padding-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+    }
+
+    .footer-name {
+      flex: 1;
+      min-width: 0;
+      font-size: 14px;
+      color: #ffffff;
+    }
+
+    .footer-more {
+      width: 32px;
+      height: 32px;
+      border: 0;
+      border-radius: 9px;
+      color: #ffffff;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .footer-more:hover {
+      background: #1f1f1f;
+    }
+
+    .main-pane {
+      min-width: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 32px 24px;
     }
 
     .chat-shell {
@@ -451,9 +783,26 @@
     }
 
     @media (max-width: 640px) {
-      body {
+      .app-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar-shell {
+        position: fixed;
+        inset: 0 auto 0 0;
+        width: min(88vw, 408px);
+        transform: translateX(calc(-100% + 68px));
+        transition: transform 200ms ease;
+      }
+
+      .sidebar-shell:hover,
+      .sidebar-shell:focus-within {
+        transform: translateX(0);
+      }
+
+      .main-pane {
         align-items: start;
-        padding-top: 70px;
+        padding: 82px 16px 28px 86px;
       }
 
       .chat-shell {
@@ -484,8 +833,82 @@
   </style>
 </head>
 <body>
-  <main class="chat-shell" aria-label="ManualMind chat">
-    <h1 class="headline">How Can I Help You</h1>
+  <div class="app-layout">
+    <aside class="sidebar-shell" aria-label="Workspace navigation">
+      <nav class="icon-rail" aria-label="Primary sections">
+        <svg class="brand-mark" viewBox="0 0 36 24" fill="none" aria-hidden="true">
+          <path d="M1 4.5h34v7H1zM1 12.5h34v7H1z" fill="currentColor"/>
+          <path d="M8 8h20M8 16h20" stroke="#000" stroke-width="3"/>
+        </svg>
+
+        <button class="rail-button" type="button" data-section="dashboard" aria-label="Dashboard">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="6" height="6" stroke-width="1.5"/><rect x="14" y="5" width="6" height="6" stroke-width="1.5"/><rect x="4" y="15" width="6" height="4" stroke-width="1.5"/><rect x="14" y="15" width="6" height="4" stroke-width="1.5"/></svg>
+        </button>
+        <button class="rail-button active" type="button" data-section="tasks" aria-label="Tasks">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 7h7M9 12h7M9 17h5" stroke-width="1.5" stroke-linecap="round"/><path d="m5 7 .8.8L7.5 6M5 12l.8.8L7.5 11M5 17l.8.8L7.5 16" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="rail-button" type="button" data-section="projects" aria-label="Projects">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h6l2 2h8v9H4z" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="rail-button" type="button" data-section="calendar" aria-label="Calendar">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="6" width="16" height="14" rx="2" stroke-width="1.5"/><path d="M8 4v4M16 4v4M4 10h16" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+        <button class="rail-button" type="button" data-section="teams" aria-label="Teams">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="9" r="3" stroke-width="1.5"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0" stroke-width="1.5" stroke-linecap="round"/><path d="M16 11a2.5 2.5 0 1 0 0-5M17 15c2 0 3.5 1.6 3.5 4" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+        <button class="rail-button" type="button" data-section="analytics" aria-label="Analytics">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M5 19V9M12 19V5M19 19v-7" stroke-width="1.5" stroke-linecap="round"/><path d="M4 19h16" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+        <button class="rail-button" type="button" data-section="files" aria-label="Files">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M7 4h8l4 4v12H7z" stroke-width="1.5" stroke-linejoin="round"/><path d="M15 4v5h5M11 14h5M11 17h3" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+
+        <div class="rail-spacer"></div>
+
+        <button class="rail-button" type="button" data-section="settings" aria-label="Settings">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z" stroke-width="1.5"/><path d="M19 13.5v-3l-2-.5-.8-1.9 1.1-1.8-2.1-2.1-1.8 1.1-1.9-.8L10 2.5H7l-.5 2-1.9.8-1.8-1.1L.7 6.3l1.1 1.8L1 10v3l2 .5.8 1.9-1.1 1.8 2.1 2.1 1.8-1.1 1.9.8.5 2h3l.5-2 1.9-.8 1.8 1.1 2.1-2.1-1.1-1.8.8-1.9 2-.5Z" stroke-width="1.2" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="rail-button profile-dot" type="button" aria-label="Profile">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8.5" r="3" stroke-width="1.5"/><path d="M6 20a6 6 0 0 1 12 0" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </nav>
+
+      <section class="detail-sidebar" aria-label="Section details">
+        <div class="sidebar-brand">
+          <svg viewBox="0 0 36 24" fill="none" aria-hidden="true">
+            <path d="M1 4.5h34v7H1zM1 12.5h34v7H1z" fill="currentColor"/>
+            <path d="M8 8h20M8 16h20" stroke="#000" stroke-width="3"/>
+          </svg>
+          <span>Interfaces</span>
+        </div>
+
+        <div class="sidebar-heading-row">
+          <h2 class="sidebar-heading" id="sidebarTitle">Tasks</h2>
+          <button class="sidebar-collapse" id="sidebarCollapse" type="button" aria-label="Collapse sidebar">
+            <svg viewBox="0 0 24 24" fill="none"><path d="m7 10 5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+
+        <label class="sidebar-search">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.5"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input id="sidebarSearch" type="search" placeholder="Search..." autocomplete="off" />
+        </label>
+
+        <div class="sidebar-content" id="sidebarContent"></div>
+
+        <div class="sidebar-footer">
+          <div class="sidebar-avatar">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8.5" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M6 20a6 6 0 0 1 12 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="footer-name">Text content</div>
+          <button class="footer-more" type="button" aria-label="More profile options">...</button>
+        </div>
+      </section>
+    </aside>
+
+    <main class="main-pane">
+      <section class="chat-shell" aria-label="ManualMind chat">
+        <h1 class="headline">How Can I Help You</h1>
 
     <section class="composer-wrap">
       <form class="composer" id="chatForm">
@@ -615,9 +1038,217 @@
         Sign Up Form
       </button>
     </div>
-  </main>
+      </section>
+    </main>
+  </div>
 
   <script>
+    const iconSvg = {
+      plus: '<svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+      filter: '<svg viewBox="0 0 24 24" fill="none"><path d="M5 6h14l-5.5 6.2V18l-3 1v-6.8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>',
+      clock: '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+      progress: '<svg viewBox="0 0 24 24" fill="none"><path d="M12 4a8 8 0 1 1-7.4 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M12 4v8l5 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+      check: '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.5"/><path d="m8.5 12 2.2 2.2 4.8-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      flag: '<svg viewBox="0 0 24 24" fill="none"><path d="M7 20V5h10l-2 4 2 4H7" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>',
+      archive: '<svg viewBox="0 0 24 24" fill="none"><path d="M5 8h14v12H5zM4 4h16v4H4zM9 12h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      dashboard: '<svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="7" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="13" y="5" width="7" height="14" stroke="currentColor" stroke-width="1.5"/><rect x="4" y="13" width="7" height="6" stroke="currentColor" stroke-width="1.5"/></svg>',
+      folder: '<svg viewBox="0 0 24 24" fill="none"><path d="M4 7h6l2 2h8v9H4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>',
+      calendar: '<svg viewBox="0 0 24 24" fill="none"><rect x="4" y="6" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 4v4M16 4v4M4 10h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+      users: '<svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="9" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0M16 11a2.5 2.5 0 1 0 0-5M17 15c2 0 3.5 1.6 3.5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+      chart: '<svg viewBox="0 0 24 24" fill="none"><path d="M5 19V9M12 19V5M19 19v-7M4 19h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+      file: '<svg viewBox="0 0 24 24" fill="none"><path d="M7 4h8l4 4v12H7zM15 4v5h5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>',
+      settings: '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.5"/><path d="M19 13.5v-3l-2-.5-.8-1.9 1.1-1.8-2.1-2.1-1.8 1.1-1.9-.8L10 2.5H7l-.5 2-1.9.8-1.8-1.1L.7 6.3l1.1 1.8L1 10v3l2 .5.8 1.9-1.1 1.8 2.1 2.1 1.8-1.1 1.9.8.5 2h3l.5-2 1.9-.8 1.8 1.1 2.1-2.1-1.1-1.8.8-1.9 2-.5Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>',
+      chevron: '<svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="m7 10 5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    };
+
+    const sidebarData = {
+      dashboard: {
+        title: "Dashboard",
+        sections: [
+          { title: "Dashboard Types", items: [
+            { icon: "dashboard", label: "Overview" },
+            { icon: "chart", label: "Executive summary", children: ["Revenue overview", "Key performance indicators", "Strategic goals"] },
+            { icon: "chart", label: "Operations dashboard", children: ["Project timeline", "Resource allocation", "Team performance"] }
+          ] },
+          { title: "Reports", items: [
+            { icon: "file", label: "Weekly reports", children: ["Productivity: 87%", "Budget utilization: 73%", "Client satisfaction: 4.6"] },
+            { icon: "chart", label: "Monthly insights" }
+          ] }
+        ]
+      },
+      tasks: {
+        title: "Tasks",
+        sections: [
+          { title: "Quick Actions", items: [
+            { icon: "plus", label: "New task", action: true },
+            { icon: "filter", label: "Filter tasks", action: true }
+          ] },
+          { title: "My Tasks", items: [
+            { icon: "clock", label: "Due today", children: ["Review design mockups", "Update documentation", "Test new feature"] },
+            { icon: "progress", label: "In progress", children: ["Implement user auth", "Database migration"] },
+            { icon: "check", label: "Completed", children: ["Fixed login bug", "Updated dependencies", "Code review completed"] }
+          ] },
+          { title: "Other", items: [
+            { icon: "flag", label: "Priority tasks", children: ["High priority", "Blocked", "Waiting on review"] },
+            { icon: "archive", label: "Archived" }
+          ] }
+        ]
+      },
+      projects: {
+        title: "Projects",
+        sections: [
+          { title: "Active Projects", items: [
+            { icon: "folder", label: "ManualMind", children: ["UI polish", "RAG backend", "Model routing"] },
+            { icon: "folder", label: "Client portal", children: ["Landing page", "Authentication"] }
+          ] },
+          { title: "Other", items: [
+            { icon: "plus", label: "New project", action: true },
+            { icon: "archive", label: "Archived" }
+          ] }
+        ]
+      },
+      calendar: {
+        title: "Calendar",
+        sections: [
+          { title: "Views", items: [
+            { icon: "calendar", label: "Month view" },
+            { icon: "clock", label: "Today's events", children: ["Team standup", "Project review", "Design sync"] }
+          ] },
+          { title: "Quick Actions", items: [
+            { icon: "plus", label: "New event", action: true }
+          ] }
+        ]
+      },
+      teams: {
+        title: "Teams",
+        sections: [
+          { title: "My Teams", items: [
+            { icon: "users", label: "Development team", children: ["Lead engineer", "Frontend", "Backend"] },
+            { icon: "users", label: "Design team", children: ["Product design", "Brand system"] }
+          ] }
+        ]
+      },
+      analytics: {
+        title: "Analytics",
+        sections: [
+          { title: "Insights", items: [
+            { icon: "chart", label: "Performance report" },
+            { icon: "chart", label: "Task completion", children: ["Completed: 24", "Avg. completion: 2.5d", "Efficiency: 87%"] }
+          ] }
+        ]
+      },
+      files: {
+        title: "Files",
+        sections: [
+          { title: "Quick Actions", items: [
+            { icon: "plus", label: "Upload file", action: true },
+            { icon: "folder", label: "New folder", action: true }
+          ] },
+          { title: "Recent Files", items: [
+            { icon: "file", label: "Recent documents", children: ["Project proposal.pdf", "Meeting notes.docx", "Design specs.fig"] },
+            { icon: "folder", label: "Shared with me" }
+          ] }
+        ]
+      },
+      settings: {
+        title: "Settings",
+        sections: [
+          { title: "Account", items: [
+            { icon: "settings", label: "Profile settings" },
+            { icon: "settings", label: "Security" },
+            { icon: "settings", label: "Notifications" }
+          ] }
+        ]
+      }
+    };
+
+    const sidebarShell = document.querySelector(".sidebar-shell");
+    const railButtons = Array.from(document.querySelectorAll(".rail-button[data-section]"));
+    const sidebarTitle = document.getElementById("sidebarTitle");
+    const sidebarContent = document.getElementById("sidebarContent");
+    const sidebarSearch = document.getElementById("sidebarSearch");
+    const sidebarCollapse = document.getElementById("sidebarCollapse");
+    let activeSection = "tasks";
+    let activeSidebarItem = "";
+    const expandedSidebarItems = new Set();
+
+    function renderSidebar() {
+      const data = sidebarData[activeSection] || sidebarData.tasks;
+      const query = sidebarSearch.value.trim().toLowerCase();
+      sidebarTitle.textContent = data.title;
+      railButtons.forEach((button) => button.classList.toggle("active", button.dataset.section === activeSection));
+
+      const sections = data.sections.map((section, sectionIndex) => {
+        const items = section.items.filter((item) => {
+          if (!query) return true;
+          const childMatch = (item.children || []).some((child) => child.toLowerCase().includes(query));
+          return item.label.toLowerCase().includes(query) || childMatch || section.title.toLowerCase().includes(query);
+        });
+        if (!items.length) return "";
+
+        const itemHtml = items.map((item, itemIndex) => {
+          const key = `${activeSection}-${sectionIndex}-${itemIndex}`;
+          const hasChildren = Array.isArray(item.children) && item.children.length > 0;
+          const expanded = expandedSidebarItems.has(key);
+          const selected = activeSidebarItem === key;
+          const submenu = hasChildren ? `<div class="submenu ${expanded ? "open" : ""}">${item.children.map((child) => `<button class="sidebar-subitem" type="button" data-child="${child}"><span class="item-label">${child}</span></button>`).join("")}</div>` : "";
+          return `
+            <div class="sidebar-row">
+              <button class="sidebar-item ${selected ? "selected" : ""} ${expanded ? "expanded" : ""}" type="button" data-key="${key}" data-dropdown="${hasChildren}">
+                ${iconSvg[item.icon] || iconSvg.file}
+                <span class="item-label">${item.label}</span>
+                ${hasChildren ? iconSvg.chevron : ""}
+              </button>
+              ${submenu}
+            </div>
+          `;
+        }).join("");
+
+        return `<section class="sidebar-section"><p class="sidebar-section-title">${section.title}</p>${itemHtml}</section>`;
+      }).join("");
+
+      sidebarContent.innerHTML = sections || `<section class="sidebar-section"><p class="sidebar-section-title">No matches</p></section>`;
+
+      Array.from(sidebarContent.querySelectorAll(".sidebar-item")).forEach((button) => {
+        button.addEventListener("click", () => {
+          const key = button.dataset.key;
+          const hasDropdown = button.dataset.dropdown === "true";
+          activeSidebarItem = key;
+          if (hasDropdown) {
+            if (expandedSidebarItems.has(key)) expandedSidebarItems.delete(key);
+            else expandedSidebarItems.add(key);
+          }
+          renderSidebar();
+        });
+      });
+
+      Array.from(sidebarContent.querySelectorAll(".sidebar-subitem")).forEach((button) => {
+        button.addEventListener("click", () => {
+          activeSidebarItem = button.dataset.child;
+          button.classList.add("selected");
+        });
+      });
+    }
+
+    railButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        activeSection = button.dataset.section;
+        activeSidebarItem = "";
+        sidebarSearch.value = "";
+        expandedSidebarItems.clear();
+        sidebarShell.classList.remove("collapsed");
+        renderSidebar();
+      });
+    });
+
+    sidebarSearch.addEventListener("input", renderSidebar);
+    sidebarCollapse.addEventListener("click", () => sidebarShell.classList.toggle("collapsed"));
+    document.querySelector(".footer-more").addEventListener("click", (event) => {
+      event.currentTarget.textContent = event.currentTarget.textContent === "..." ? "✓" : "...";
+    });
+
+    renderSidebar();
+
     const textarea = document.getElementById("messageInput");
     const sendButton = document.getElementById("sendButton");
     const form = document.getElementById("chatForm");
