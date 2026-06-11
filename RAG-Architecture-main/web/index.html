@@ -593,10 +593,19 @@
     }
 
     .sidebar-product {
+      border: 0;
+      background: transparent;
       color: #ffffff;
       font-size: 18px;
       font-weight: 700;
       letter-spacing: 0;
+      padding: 0;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .sidebar-product:hover {
+      color: #e8e8e8;
     }
 
     .panel-toggle,
@@ -2002,7 +2011,7 @@
       </div>
 
       <div class="sidebar-topbar">
-        <div class="sidebar-product">E-AI</div>
+        <button class="sidebar-product" id="homeButton" type="button">E-AI</button>
         <button class="panel-toggle" id="sidebarCollapse" type="button" aria-label="Close sidebar">
           <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M9 5v14" stroke="currentColor" stroke-width="1.6"/></svg>
         </button>
@@ -2582,6 +2591,7 @@
     const shareChatLabel = document.getElementById("shareChatLabel");
     const chatMoreButton = document.getElementById("chatMoreButton");
     const chatMoreMenu = document.getElementById("chatMoreMenu");
+    const homeButton = document.getElementById("homeButton");
     const newChatButton = document.getElementById("newChatButton");
     const chatSearchButton = document.getElementById("chatSearchButton");
     const chatHistoryList = document.getElementById("chatHistoryList");
@@ -2644,14 +2654,38 @@
       });
     });
 
+    function resetToHome() {
+      mainPane.classList.remove("chat-active");
+      chatTranscript.innerHTML = "";
+      activityPanel.classList.remove("open");
+      chatMoreMenu.classList.remove("open");
+      chatMoreButton.classList.remove("active");
+      chatMoreButton.setAttribute("aria-expanded", "false");
+      Array.from(document.querySelectorAll(".chat-history-item")).forEach((item) => item.classList.remove("selected"));
+      Array.from(document.querySelectorAll(".chatgpt-button")).forEach((item) => item.classList.remove("active"));
+      newChatButton.classList.add("active");
+      const input = document.getElementById("messageInput");
+      const preview = document.getElementById("filePreview");
+      const selectedFileName = document.getElementById("fileName");
+      const attachmentInput = document.getElementById("fileInput");
+      if (input) input.value = "";
+      if (attachmentInput) attachmentInput.value = "";
+      if (selectedFileName) selectedFileName.textContent = "";
+      if (preview) preview.classList.remove("show");
+      if (typeof resizeTextarea === "function") resizeTextarea();
+      if (typeof updateSendState === "function") updateSendState();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
     newChatButton.addEventListener("click", () => {
       const nextNumber = chats.length + 1;
       chats.unshift(`Untitled chat ${nextNumber}`);
       document.querySelector('[data-group="chats"]').classList.remove("collapsed");
       renderChatHistory();
-      const firstChat = chatHistoryList.querySelector(".chat-history-item");
-      if (firstChat) firstChat.classList.add("selected");
+      resetToHome();
     });
+
+    homeButton.addEventListener("click", resetToHome);
 
     function openChatSearch() {
       const existingSearch = document.getElementById("inlineChatSearch");
