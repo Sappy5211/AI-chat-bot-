@@ -1304,6 +1304,116 @@
       opacity: 0.9;
     }
 
+    .voice-recorder {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      min-height: 44px;
+      padding: 2px 6px;
+    }
+
+    .composer.recording .message-input {
+      display: none;
+    }
+
+    .composer.recording .voice-recorder {
+      display: flex;
+    }
+
+    .record-time {
+      color: #bdbdbd;
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+      min-width: 42px;
+    }
+
+    .voice-bars {
+      flex: 1;
+      min-width: 0;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      overflow: hidden;
+    }
+
+    .voice-bars span {
+      width: 3px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.42);
+      animation: voice-wave 900ms infinite ease-in-out;
+    }
+
+    .voice-bars span:nth-child(3n) {
+      animation-delay: 120ms;
+    }
+
+    .voice-bars span:nth-child(4n) {
+      animation-delay: 240ms;
+    }
+
+    .voice-bars span:nth-child(5n) {
+      animation-delay: 360ms;
+    }
+
+    @keyframes voice-wave {
+      0%,
+      100% {
+        height: 7px;
+        opacity: 0.45;
+      }
+      50% {
+        height: 30px;
+        opacity: 1;
+      }
+    }
+
+    .voice-control {
+      width: 32px;
+      height: 32px;
+      border: 0;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .voice-control:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .voice-control.accept {
+      color: #111111;
+      background: #ffffff;
+    }
+
+    .voice-control svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    body.light-mode .voice-bars span {
+      background: rgba(0, 0, 0, 0.38);
+    }
+
+    body.light-mode .record-time {
+      color: #626262;
+    }
+
+    body.light-mode .voice-control {
+      color: #111111;
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    body.light-mode .voice-control.accept {
+      color: #ffffff;
+      background: #111111;
+    }
+
     .composer-actions {
       display: flex;
       align-items: center;
@@ -1836,6 +1946,16 @@
         </div>
 
         <textarea class="message-input" id="messageInput" name="message" rows="1" placeholder="Message..." autocomplete="off"></textarea>
+        <div class="voice-recorder" id="voiceRecorder" aria-live="polite">
+          <span class="record-time" id="recordTime">00:00</span>
+          <div class="voice-bars" id="voiceBars" aria-hidden="true"></div>
+          <button class="voice-control discard" id="discardVoice" type="button" aria-label="Discard recording">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+          <button class="voice-control accept" id="acceptVoice" type="button" aria-label="Accept recording">
+            <svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4 10-10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
 
         <div class="composer-actions">
           <input class="sr-only" id="fileInput" type="file" />
@@ -1886,7 +2006,7 @@
           </div>
 
           <div class="right-actions">
-            <button class="action-button mic-button" type="button" aria-label="Record voice" title="Record voice">
+            <button class="action-button mic-button" id="micButton" type="button" aria-label="Record voice" title="Record voice">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z" stroke="currentColor" stroke-width="1.7" />
                 <path d="M5 11v1a7 7 0 0 0 14 0v-1M12 19v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
@@ -2410,7 +2530,8 @@
 
     function renderAssistantFlow(prompt) {
       mainPane.classList.add("chat-active");
-      chatTranscript.innerHTML = `
+      chatTranscript.querySelectorAll("[id]").forEach((element) => element.removeAttribute("id"));
+      chatTranscript.insertAdjacentHTML("beforeend", `
         <div class="user-bubble">${escapeHtml(prompt)}</div>
         <div class="assistant-flow">
           <div class="assistant-message">I’ll interpret your request, check the available context, and turn it into a practical next step.</div>
@@ -2469,7 +2590,7 @@
             </div>
           </div>
         </div>
-      `;
+      `);
 
       setActivity(0, [
         "Parsed the user message into an intended action.",
@@ -2576,6 +2697,12 @@
     const filePreview = document.getElementById("filePreview");
     const fileName = document.getElementById("fileName");
     const removeFile = document.getElementById("removeFile");
+    const composer = document.querySelector(".composer");
+    const micButton = document.getElementById("micButton");
+    const voiceBars = document.getElementById("voiceBars");
+    const recordTime = document.getElementById("recordTime");
+    const acceptVoice = document.getElementById("acceptVoice");
+    const discardVoice = document.getElementById("discardVoice");
     const toolsButton = document.getElementById("toolsButton");
     const toolMenu = document.getElementById("toolMenu");
     const modelButton = document.getElementById("modelButton");
@@ -2591,6 +2718,101 @@
     function updateSendState() {
       sendButton.classList.toggle("ready", textarea.value.trim().length > 0 || fileInput.files.length > 0);
     }
+
+    for (let index = 0; index < 54; index += 1) {
+      const bar = document.createElement("span");
+      bar.style.animationDelay = `${(index % 12) * 0.045}s`;
+      voiceBars.appendChild(bar);
+    }
+
+    let isRecording = false;
+    let recordingSeconds = 0;
+    let recordingTimer = null;
+    let recognition = null;
+    let dictatedText = "";
+
+    function formatRecordingTime(seconds) {
+      const minutes = Math.floor(seconds / 60).toString().padStart(2, "0");
+      const secs = (seconds % 60).toString().padStart(2, "0");
+      return `${minutes}:${secs}`;
+    }
+
+    function getSpeechRecognition() {
+      const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!Recognition) return null;
+      const instance = new Recognition();
+      instance.continuous = true;
+      instance.interimResults = true;
+      instance.lang = "en-US";
+      instance.onresult = (event) => {
+        let transcript = "";
+        for (let index = 0; index < event.results.length; index += 1) {
+          transcript += event.results[index][0].transcript;
+        }
+        dictatedText = transcript.trim();
+      };
+      instance.onerror = () => {
+        dictatedText = dictatedText || "Voice note captured for this chat.";
+      };
+      return instance;
+    }
+
+    function startRecording() {
+      if (isRecording) return;
+      isRecording = true;
+      dictatedText = "";
+      recordingSeconds = 0;
+      recordTime.textContent = "00:00";
+      composer.classList.add("recording");
+      micButton.classList.add("active");
+      recordingTimer = setInterval(() => {
+        recordingSeconds += 1;
+        recordTime.textContent = formatRecordingTime(recordingSeconds);
+      }, 1000);
+
+      recognition = getSpeechRecognition();
+      if (recognition) {
+        try {
+          recognition.start();
+        } catch (_error) {
+          recognition = null;
+        }
+      }
+    }
+
+    function stopRecording(accept) {
+      if (!isRecording) return;
+      isRecording = false;
+      clearInterval(recordingTimer);
+      recordingTimer = null;
+      composer.classList.remove("recording");
+      micButton.classList.remove("active");
+
+      if (recognition) {
+        try {
+          recognition.stop();
+        } catch (_error) {}
+      }
+
+      if (accept) {
+        const fallback = recordingSeconds > 1
+          ? "Please use this voice note as my next prompt."
+          : "Voice prompt captured.";
+        textarea.value = dictatedText || fallback;
+        resizeTextarea();
+        updateSendState();
+        textarea.focus();
+      }
+
+      dictatedText = "";
+      recognition = null;
+      recordingSeconds = 0;
+      recordTime.textContent = "00:00";
+    }
+
+    micButton.addEventListener("click", startRecording);
+    acceptVoice.addEventListener("click", () => stopRecording(true));
+    discardVoice.addEventListener("click", () => stopRecording(false));
 
     textarea.addEventListener("input", () => {
       resizeTextarea();
