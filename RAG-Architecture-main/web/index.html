@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ManualMind Chat</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --page: #202020;
+      --panel: #303030;
+      --panel-deep: #181818;
+      --line: rgba(255, 255, 255, 0.08);
+      --line-strong: rgba(255, 255, 255, 0.15);
+      --text: #f6f6f6;
+      --muted: #b8b8b8;
+      --soft: #7b7b7b;
+      --control: rgba(255, 255, 255, 0.08);
+      --control-hover: rgba(255, 255, 255, 0.14);
+      --accent: #ffffff;
+      --accent-ink: #111111;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.06), transparent 34rem),
+        linear-gradient(180deg, #242424 0%, var(--page) 46%, #191919 100%);
+      color: var(--text);
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+      padding: 32px 18px;
+    }
+
+    .chat-shell {
+      width: min(100%, 920px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 34px;
+    }
+
+    .headline {
+      margin: 0;
+      font-size: clamp(32px, 4vw, 46px);
+      font-weight: 650;
+      line-height: 1.05;
+      letter-spacing: 0;
+      color: #ffffff;
+      text-align: center;
+      text-wrap: balance;
+    }
+
+    .composer-wrap {
+      width: min(100%, 760px);
+      position: relative;
+    }
+
+    .composer-wrap::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: 31px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.035) 38%, rgba(255, 255, 255, 0.12));
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .composer {
+      position: relative;
+      z-index: 1;
+      min-height: 112px;
+      border-radius: 30px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 42%),
+        var(--panel);
+      box-shadow:
+        0 28px 70px rgba(0, 0, 0, 0.34),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      padding: 18px 18px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .message-input {
+      width: 100%;
+      min-height: 44px;
+      max-height: 190px;
+      resize: none;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      font-size: 16px;
+      line-height: 1.45;
+      padding: 4px 4px 0;
+      overflow: hidden;
+    }
+
+    .message-input::placeholder {
+      color: #d8d8d8;
+      opacity: 0.9;
+    }
+
+    .composer-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 36px;
+    }
+
+    .action-button {
+      border: 0;
+      outline: 0;
+      height: 36px;
+      min-width: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      transition: background 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease;
+      font: inherit;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .action-button:hover {
+      background: var(--control-hover);
+    }
+
+    .action-button:active {
+      transform: translateY(1px);
+    }
+
+    .action-button svg {
+      width: 20px;
+      height: 20px;
+      flex: 0 0 auto;
+    }
+
+    .tools-button {
+      padding: 0 12px 0 10px;
+      color: #ffffff;
+    }
+
+    .right-actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mic-button {
+      color: #f4f4f4;
+    }
+
+    .send-button {
+      background: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+    }
+
+    .send-button.ready {
+      background: var(--accent);
+      color: var(--accent-ink);
+    }
+
+    .send-button.ready:hover {
+      background: #e8e8e8;
+    }
+
+    .suggestions {
+      width: min(100%, 760px);
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .chip {
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.055);
+      color: var(--muted);
+      padding: 0 15px;
+      font: inherit;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+      transition: background 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease;
+    }
+
+    .chip:hover {
+      color: #ffffff;
+      border-color: var(--line-strong);
+      background: rgba(255, 255, 255, 0.09);
+      transform: translateY(-1px);
+    }
+
+    .chip svg {
+      width: 17px;
+      height: 17px;
+      color: #cfcfcf;
+    }
+
+    .tool-menu {
+      position: absolute;
+      left: 54px;
+      bottom: 55px;
+      width: 240px;
+      display: none;
+      padding: 7px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #2b2b2b;
+      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.42);
+      z-index: 3;
+    }
+
+    .tool-menu.open {
+      display: block;
+    }
+
+    .tool-menu button {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      border-radius: 10px;
+      padding: 10px 11px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font: inherit;
+      font-size: 14px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .tool-menu button:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .preview {
+      display: none;
+      width: fit-content;
+      max-width: 100%;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--muted);
+      padding: 7px 10px;
+      font-size: 13px;
+    }
+
+    .preview.show {
+      display: inline-flex;
+    }
+
+    .preview button {
+      border: 0;
+      background: transparent;
+      color: #ffffff;
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        align-items: start;
+        padding-top: 70px;
+      }
+
+      .chat-shell {
+        gap: 28px;
+      }
+
+      .composer {
+        min-height: 122px;
+        border-radius: 26px;
+        padding: 16px 14px 12px;
+      }
+
+      .composer-wrap::before {
+        border-radius: 27px;
+      }
+
+      .suggestions {
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 2px;
+      }
+
+      .chip {
+        flex: 0 0 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="chat-shell" aria-label="ManualMind chat">
+    <h1 class="headline">How Can I Help You</h1>
+
+    <section class="composer-wrap">
+      <form class="composer" id="chatForm">
+        <div class="preview" id="filePreview">
+          <span id="fileName"></span>
+          <button type="button" id="removeFile" aria-label="Remove attachment">x</button>
+        </div>
+
+        <textarea class="message-input" id="messageInput" name="message" rows="1" placeholder="Message..." autocomplete="off"></textarea>
+
+        <div class="composer-actions">
+          <input class="sr-only" id="fileInput" type="file" />
+
+          <button class="action-button" type="button" id="attachButton" aria-label="Attach file" title="Attach file">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            </svg>
+          </button>
+
+          <button class="action-button tools-button" type="button" id="toolsButton" aria-expanded="false">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M20 7h-9M14 17H4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+              <circle cx="7" cy="7" r="2.4" stroke="currentColor" stroke-width="1.6" />
+              <circle cx="17" cy="17" r="2.4" stroke="currentColor" stroke-width="1.6" />
+            </svg>
+            <span>Tools</span>
+          </button>
+
+          <div class="tool-menu" id="toolMenu">
+            <button type="button">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 16l4-4 3 3 5-6 4 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.6"/></svg>
+              Analyze an image
+            </button>
+            <button type="button">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M12 5v14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/></svg>
+              Search manuals
+            </button>
+            <button type="button">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><rect x="5" y="4" width="14" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/></svg>
+              Summarize document
+            </button>
+          </div>
+
+          <div class="right-actions">
+            <button class="action-button mic-button" type="button" aria-label="Record voice" title="Record voice">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z" stroke="currentColor" stroke-width="1.7" />
+                <path d="M5 11v1a7 7 0 0 0 14 0v-1M12 19v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+              </svg>
+            </button>
+
+            <button class="action-button send-button" id="sendButton" type="submit" aria-label="Send message" title="Send message">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <div class="suggestions" aria-label="Suggested actions">
+      <button class="chip" type="button">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 15l2.3-2.3 2 2L16 11l2 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Clone a Screenshot
+      </button>
+      <button class="chip" type="button">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 4h8M8 12h8M8 20h8M8 4v16M16 4v16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4" r="2" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="12" r="2" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="20" r="2" stroke="currentColor" stroke-width="1.5"/></svg>
+        Import from Figma
+      </button>
+      <button class="chip" type="button">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15V6M8.5 9.5 12 6l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="5" y="4" width="14" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/></svg>
+        Upload a Project
+      </button>
+      <button class="chip" type="button">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M9 20h6M12 16v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Landing Page
+      </button>
+      <button class="chip" type="button">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="9" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M6.8 19a5.8 5.8 0 0 1 10.4 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Sign Up Form
+      </button>
+    </div>
+  </main>
+
+  <script>
+    const textarea = document.getElementById("messageInput");
+    const sendButton = document.getElementById("sendButton");
+    const form = document.getElementById("chatForm");
+    const attachButton = document.getElementById("attachButton");
+    const fileInput = document.getElementById("fileInput");
+    const filePreview = document.getElementById("filePreview");
+    const fileName = document.getElementById("fileName");
+    const removeFile = document.getElementById("removeFile");
+    const toolsButton = document.getElementById("toolsButton");
+    const toolMenu = document.getElementById("toolMenu");
+
+    function resizeTextarea() {
+      textarea.style.height = "auto";
+      textarea.style.height = `${Math.min(textarea.scrollHeight, 190)}px`;
+    }
+
+    function updateSendState() {
+      sendButton.classList.toggle("ready", textarea.value.trim().length > 0 || fileInput.files.length > 0);
+    }
+
+    textarea.addEventListener("input", () => {
+      resizeTextarea();
+      updateSendState();
+    });
+
+    textarea.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        form.requestSubmit();
+      }
+    });
+
+    attachButton.addEventListener("click", () => fileInput.click());
+
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+      fileName.textContent = file.name;
+      filePreview.classList.add("show");
+      updateSendState();
+    });
+
+    removeFile.addEventListener("click", () => {
+      fileInput.value = "";
+      fileName.textContent = "";
+      filePreview.classList.remove("show");
+      updateSendState();
+    });
+
+    toolsButton.addEventListener("click", () => {
+      const isOpen = toolMenu.classList.toggle("open");
+      toolsButton.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!toolMenu.contains(event.target) && !toolsButton.contains(event.target)) {
+        toolMenu.classList.remove("open");
+        toolsButton.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!textarea.value.trim() && fileInput.files.length === 0) return;
+      textarea.value = "";
+      fileInput.value = "";
+      fileName.textContent = "";
+      filePreview.classList.remove("show");
+      resizeTextarea();
+      updateSendState();
+    });
+
+    resizeTextarea();
+    updateSendState();
+    textarea.focus();
+  </script>
+</body>
+</html>
