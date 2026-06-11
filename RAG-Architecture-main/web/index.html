@@ -903,6 +903,167 @@
       line-height: 1.65;
     }
 
+    .response-actions {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      margin-top: -6px;
+      color: #ffffff;
+    }
+
+    .response-actions.show {
+      display: flex;
+    }
+
+    .response-action {
+      width: 28px;
+      height: 28px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: currentColor;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .response-action:hover,
+    .response-action.active {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .response-action svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .sources-action {
+      width: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 6px;
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .source-badges {
+      display: inline-flex;
+      align-items: center;
+      margin-right: 2px;
+    }
+
+    .source-badge {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 1px solid #050505;
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 800;
+      margin-left: -4px;
+    }
+
+    .source-badge:first-child {
+      margin-left: 0;
+      background: #2f8cff;
+    }
+
+    .source-badge:last-child {
+      background: #ef4444;
+    }
+
+    .retry-popover {
+      position: absolute;
+      left: 122px;
+      bottom: 34px;
+      width: 250px;
+      display: none;
+      border-radius: 12px;
+      background: #303030;
+      color: #ffffff;
+      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.42);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      z-index: 8;
+    }
+
+    .retry-popover.open {
+      display: block;
+    }
+
+    .retry-input {
+      display: grid;
+      grid-template-columns: 1fr 28px;
+      gap: 8px;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .retry-input input {
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: #ffffff;
+      font-size: 13px;
+    }
+
+    .retry-input input::placeholder {
+      color: #a7a7a7;
+    }
+
+    .retry-menu-button {
+      width: 100%;
+      min-height: 40px;
+      border: 0;
+      background: transparent;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 0 12px;
+      cursor: pointer;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    .retry-menu-button:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .retry-menu-button svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    body.light-mode .response-actions {
+      color: #151515;
+    }
+
+    body.light-mode .response-action:hover,
+    body.light-mode .response-action.active {
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    body.light-mode .retry-popover {
+      background: #ffffff;
+      color: #151515;
+      border-color: rgba(0, 0, 0, 0.1);
+      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.16);
+    }
+
+    body.light-mode .retry-input,
+    body.light-mode .retry-menu-button,
+    body.light-mode .retry-input input {
+      color: #151515;
+    }
+
     .status-line,
     .thinking-line {
       color: #b8b8b8;
@@ -2259,6 +2420,54 @@
           </button>
           <div class="status-line" id="statusLine">Checking the local project context and recent UI state.</div>
           <div class="final-message" id="finalMessage" style="display:none;"></div>
+          <div class="response-actions" id="responseActions" aria-label="Response actions">
+            <button class="response-action" id="copyResponse" type="button" aria-label="Copy response" title="Copy">
+              <svg viewBox="0 0 24 24" fill="none"><rect x="8" y="8" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M5 15H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="1.6"/></svg>
+            </button>
+            <button class="response-action" type="button" aria-label="Like response" title="Like">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M7 21H4V10h3m0 11h10.2a2 2 0 0 0 2-1.7l1.1-7A2 2 0 0 0 18.3 10H14V5.5A2.5 2.5 0 0 0 11.5 3L7 10z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="response-action" type="button" aria-label="Dislike response" title="Dislike">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M7 3H4v11h3m0-11h10.2a2 2 0 0 1 2 1.7l1.1 7a2 2 0 0 1-2 2.3H14v4.5A2.5 2.5 0 0 1 11.5 21L7 14z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="response-action" type="button" aria-label="Upload response" title="Upload">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 16V4M7 9l5-5 5 5M5 16v3h14v-3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="response-action" id="retryResponse" type="button" aria-label="Try again" title="Try again">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="response-action" type="button" aria-label="More options" title="More">
+              <svg viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="19" cy="12" r="1.5" fill="currentColor"/></svg>
+            </button>
+            <button class="response-action sources-action" id="sourcesButton" type="button" aria-label="Open sources" title="Sources">
+              <span class="source-badges"><span class="source-badge">E</span><span class="source-badge">S</span></span>
+              Sources
+            </button>
+            <div class="retry-popover" id="retryPopover">
+              <div class="retry-input">
+                <input id="retryInstruction" type="text" placeholder="Ask to change response" />
+                <button class="response-action" id="retrySubmit" type="button" aria-label="Apply retry instruction">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+              <button class="retry-menu-button" id="retryThinking" type="button">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Try again • 5.5 Thinking
+              </button>
+              <button class="retry-menu-button" id="retryModel" type="button">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M8 12h8M10 17h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                Change model
+              </button>
+              <button class="retry-menu-button" id="retryTools" type="button">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                Enable / disable tools
+              </button>
+              <button class="retry-menu-button" id="retryWeb" type="button">
+                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.6"/><path d="M4 12h16M12 4a13 13 0 0 1 0 16" stroke="currentColor" stroke-width="1.4"/></svg>
+                Don’t search the web
+              </button>
+            </div>
+          </div>
         </div>
       `;
 
@@ -2286,14 +2495,77 @@
       setTimeout(() => {
         document.getElementById("finalMessage").style.display = "block";
         document.getElementById("finalMessage").textContent = "Done. I’ve handled the request in the interface preview and kept the workflow ready for backend wiring.";
+        document.getElementById("responseActions").classList.add("show");
         document.getElementById("statusLine").textContent = "Thought for 3s";
         document.querySelector(".thinking-line").style.display = "none";
+        wireResponseActions();
         setActivity(3, [
           "Completed the visible response sequence.",
           "Generated a final user-facing answer.",
           "Activity details are available here without exposing private chain-of-thought."
         ], ["ManualMind local UI", "Conversation prompt"]);
       }, 3200);
+    }
+
+    function wireResponseActions() {
+      const finalMessage = document.getElementById("finalMessage");
+      const copyResponse = document.getElementById("copyResponse");
+      const retryResponse = document.getElementById("retryResponse");
+      const retryPopover = document.getElementById("retryPopover");
+      const retryInstruction = document.getElementById("retryInstruction");
+      const retrySubmit = document.getElementById("retrySubmit");
+      const sourcesButton = document.getElementById("sourcesButton");
+
+      copyResponse.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(finalMessage.textContent);
+          copyResponse.classList.add("active");
+          setTimeout(() => copyResponse.classList.remove("active"), 900);
+        } catch (_error) {
+          copyResponse.classList.add("active");
+        }
+      });
+
+      retryResponse.addEventListener("click", (event) => {
+        event.stopPropagation();
+        retryPopover.classList.toggle("open");
+        if (retryPopover.classList.contains("open")) retryInstruction.focus();
+      });
+
+      function applyRetry(label) {
+        retryPopover.classList.remove("open");
+        finalMessage.textContent = `Reprocessed response using: ${label}. I’ve kept the answer focused while applying the selected adjustment.`;
+        setActivity(5, [
+          `Reprocessed with option: ${label}.`,
+          "Compared the existing response against the requested adjustment.",
+          "Produced an updated final answer without changing the visible prompt."
+        ], ["Current response", "Retry instruction", "E-AI activity settings"]);
+      }
+
+      retrySubmit.addEventListener("click", () => {
+        applyRetry(retryInstruction.value.trim() || "extra information");
+      });
+      retryInstruction.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") applyRetry(retryInstruction.value.trim() || "extra information");
+      });
+      document.getElementById("retryThinking").addEventListener("click", () => applyRetry("5.5 Thinking"));
+      document.getElementById("retryModel").addEventListener("click", () => applyRetry("changed model"));
+      document.getElementById("retryTools").addEventListener("click", () => applyRetry("updated tool settings"));
+      document.getElementById("retryWeb").addEventListener("click", () => applyRetry("web search disabled"));
+
+      sourcesButton.addEventListener("click", () => {
+        activityPanel.classList.add("open");
+        setActivity(3, [
+          "Opened the source list for this answer.",
+          "Showing the local files and UI context used for the response."
+        ], ["ManualMind local UI", "RAG-Architecture-main/web/index.html", "Current prompt"]);
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!retryPopover.contains(event.target) && !retryResponse.contains(event.target)) {
+          retryPopover.classList.remove("open");
+        }
+      }, { once: true });
     }
 
     const textarea = document.getElementById("messageInput");
