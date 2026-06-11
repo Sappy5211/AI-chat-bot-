@@ -282,7 +282,8 @@
 
     .sidebar-item:hover,
     .sidebar-item.selected,
-    .sidebar-subitem:hover {
+    .sidebar-subitem:hover,
+    .sidebar-subitem.selected {
       background: #1f1f1f;
     }
 
@@ -335,6 +336,95 @@
       gap: 10px;
     }
 
+    .announcement-card {
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      background: #f6f6f6;
+      color: #111111;
+      padding: 13px 12px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+      margin-top: auto;
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .announcement-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.38);
+    }
+
+    .announcement-ping,
+    .announcement-dot {
+      position: absolute;
+      top: -7px;
+      right: -7px;
+      width: 17px;
+      height: 17px;
+      border-radius: 999px;
+      background: #3b82f6;
+    }
+
+    .announcement-ping {
+      animation: ping 1.45s cubic-bezier(0, 0, 0.2, 1) infinite;
+      opacity: 0.75;
+    }
+
+    @keyframes ping {
+      75%,
+      100% {
+        transform: scale(1.75);
+        opacity: 0;
+      }
+    }
+
+    .announcement-title {
+      margin: 0 0 5px;
+      color: #e8e8e8;
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .announcement-card:hover .announcement-title {
+      color: #111111;
+    }
+
+    .announcement-description {
+      margin: 0;
+      color: #7b7b86;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .announcement-footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      color: #6b7280;
+      font-size: 11px;
+      transition: max-height 180ms ease, opacity 180ms ease, margin-top 180ms ease;
+    }
+
+    .announcement-card:hover .announcement-footer,
+    .announcement-card.expanded .announcement-footer {
+      max-height: 28px;
+      opacity: 1;
+      margin-top: 10px;
+    }
+
+    .announcement-footer button {
+      border: 0;
+      background: transparent;
+      color: #4b5563;
+      padding: 0;
+      cursor: pointer;
+      font: inherit;
+      text-decoration: underline;
+    }
+
     .sidebar-avatar {
       width: 34px;
       height: 34px;
@@ -352,6 +442,14 @@
       color: #ffffff;
     }
 
+    .footer-email {
+      display: block;
+      margin-top: 2px;
+      color: #8d8d8d;
+      font-size: 12px;
+      line-height: 1.1;
+    }
+
     .footer-more {
       width: 32px;
       height: 32px;
@@ -364,6 +462,17 @@
 
     .footer-more:hover {
       background: #1f1f1f;
+    }
+
+    .chat-meta {
+      display: block;
+      margin-top: 2px;
+      color: #777777;
+      font-size: 11px;
+      line-height: 1.2;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     .main-pane {
@@ -841,10 +950,14 @@
           <path d="M8 8h20M8 16h20" stroke="#000" stroke-width="3"/>
         </svg>
 
+        <button class="rail-button" type="button" id="sideTabsToggle" aria-label="Collapse side tabs" title="Collapse side tabs">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M15 6 9 12l6 6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 5v14" stroke-width="1.7" stroke-linecap="round"/></svg>
+        </button>
+
         <button class="rail-button" type="button" data-section="dashboard" aria-label="Dashboard">
           <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="6" height="6" stroke-width="1.5"/><rect x="14" y="5" width="6" height="6" stroke-width="1.5"/><rect x="4" y="15" width="6" height="4" stroke-width="1.5"/><rect x="14" y="15" width="6" height="4" stroke-width="1.5"/></svg>
         </button>
-        <button class="rail-button active" type="button" data-section="tasks" aria-label="Tasks">
+        <button class="rail-button active" type="button" data-section="chats" aria-label="Chats">
           <svg viewBox="0 0 24 24" fill="none"><path d="M9 7h7M9 12h7M9 17h5" stroke-width="1.5" stroke-linecap="round"/><path d="m5 7 .8.8L7.5 6M5 12l.8.8L7.5 11M5 17l.8.8L7.5 16" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <button class="rail-button" type="button" data-section="projects" aria-label="Projects">
@@ -858,6 +971,9 @@
         </button>
         <button class="rail-button" type="button" data-section="analytics" aria-label="Analytics">
           <svg viewBox="0 0 24 24" fill="none"><path d="M5 19V9M12 19V5M19 19v-7" stroke-width="1.5" stroke-linecap="round"/><path d="M4 19h16" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+        <button class="rail-button" type="button" data-section="graphify" aria-label="Graphify">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="16" r="2" stroke-width="1.5"/><circle cx="12" cy="8" r="2" stroke-width="1.5"/><circle cx="18" cy="15" r="2" stroke-width="1.5"/><path d="m7.4 14.4 3.2-4.8M13.7 9.3l2.6 4.4" stroke-width="1.5" stroke-linecap="round"/></svg>
         </button>
         <button class="rail-button" type="button" data-section="files" aria-label="Files">
           <svg viewBox="0 0 24 24" fill="none"><path d="M7 4h8l4 4v12H7z" stroke-width="1.5" stroke-linejoin="round"/><path d="M15 4v5h5M11 14h5M11 17h3" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -883,7 +999,7 @@
         </div>
 
         <div class="sidebar-heading-row">
-          <h2 class="sidebar-heading" id="sidebarTitle">Tasks</h2>
+          <h2 class="sidebar-heading" id="sidebarTitle">Chats</h2>
           <button class="sidebar-collapse" id="sidebarCollapse" type="button" aria-label="Collapse sidebar">
             <svg viewBox="0 0 24 24" fill="none"><path d="m7 10 5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
@@ -896,11 +1012,22 @@
 
         <div class="sidebar-content" id="sidebarContent"></div>
 
+        <div class="announcement-card" id="announcementCard" role="button" tabindex="0" aria-label="Product update">
+          <span class="announcement-ping"></span>
+          <span class="announcement-dot"></span>
+          <p class="announcement-title">ManualMind update</p>
+          <p class="announcement-description">Chat history, model switching, and Graphify workspace views are being added.</p>
+          <div class="announcement-footer">
+            <button type="button" id="dismissAnnouncement">Dismiss</button>
+            <span>Read more</span>
+          </div>
+        </div>
+
         <div class="sidebar-footer">
           <div class="sidebar-avatar">
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8.5" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M6 20a6 6 0 0 1 12 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           </div>
-          <div class="footer-name">Text content</div>
+          <div class="footer-name">KL<span class="footer-email">kl@example.com</span></div>
           <button class="footer-more" type="button" aria-label="More profile options">...</button>
         </div>
       </section>
@@ -1056,6 +1183,8 @@
       calendar: '<svg viewBox="0 0 24 24" fill="none"><rect x="4" y="6" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 4v4M16 4v4M4 10h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
       users: '<svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="9" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0M16 11a2.5 2.5 0 1 0 0-5M17 15c2 0 3.5 1.6 3.5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
       chart: '<svg viewBox="0 0 24 24" fill="none"><path d="M5 19V9M12 19V5M19 19v-7M4 19h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+      chat: '<svg viewBox="0 0 24 24" fill="none"><path d="M5 6.5A3.5 3.5 0 0 1 8.5 3h7A3.5 3.5 0 0 1 19 6.5v5A3.5 3.5 0 0 1 15.5 15H11l-5 4v-4.2a3.5 3.5 0 0 1-1-2.4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 8h8M8 11h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+      graph: '<svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="16" r="2" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/><circle cx="18" cy="15" r="2" stroke="currentColor" stroke-width="1.5"/><path d="m7.4 14.4 3.2-4.8M13.7 9.3l2.6 4.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
       file: '<svg viewBox="0 0 24 24" fill="none"><path d="M7 4h8l4 4v12H7zM15 4v5h5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>',
       settings: '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.5"/><path d="M19 13.5v-3l-2-.5-.8-1.9 1.1-1.8-2.1-2.1-1.8 1.1-1.9-.8L10 2.5H7l-.5 2-1.9.8-1.8-1.1L.7 6.3l1.1 1.8L1 10v3l2 .5.8 1.9-1.1 1.8 2.1 2.1 1.8-1.1 1.9.8.5 2h3l.5-2 1.9-.8 1.8 1.1 2.1-2.1-1.1-1.8.8-1.9 2-.5Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>',
       chevron: '<svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="m7 10 5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
@@ -1063,77 +1192,88 @@
 
     const sidebarData = {
       dashboard: {
-        title: "Dashboard",
+        title: "Workspace",
         sections: [
-          { title: "Dashboard Types", items: [
-            { icon: "dashboard", label: "Overview" },
-            { icon: "chart", label: "Executive summary", children: ["Revenue overview", "Key performance indicators", "Strategic goals"] },
-            { icon: "chart", label: "Operations dashboard", children: ["Project timeline", "Resource allocation", "Team performance"] }
+          { title: "At a glance", items: [
+            { icon: "dashboard", label: "Home base", meta: "Current app state" },
+            { icon: "chart", label: "Usage pulse", meta: "Questions, uploads, retrievals" },
+            { icon: "file", label: "Source health", meta: "Manuals and indexes" }
           ] },
-          { title: "Reports", items: [
-            { icon: "file", label: "Weekly reports", children: ["Productivity: 87%", "Budget utilization: 73%", "Client satisfaction: 4.6"] },
-            { icon: "chart", label: "Monthly insights" }
+          { title: "Shortcuts", items: [
+            { icon: "plus", label: "Start from template", action: true },
+            { icon: "settings", label: "Tune workspace" }
           ] }
         ]
       },
-      tasks: {
-        title: "Tasks",
+      chats: {
+        title: "Chats",
         sections: [
-          { title: "Quick Actions", items: [
-            { icon: "plus", label: "New task", action: true },
-            { icon: "filter", label: "Filter tasks", action: true }
+          { title: "Start", items: [
+            { icon: "plus", label: "New chat", meta: "Open a fresh conversation", action: true },
+            { icon: "filter", label: "Filter history", meta: "Search by topic or file", action: true }
           ] },
-          { title: "My Tasks", items: [
-            { icon: "clock", label: "Due today", children: ["Review design mockups", "Update documentation", "Test new feature"] },
-            { icon: "progress", label: "In progress", children: ["Implement user auth", "Database migration"] },
-            { icon: "check", label: "Completed", children: ["Fixed login bug", "Updated dependencies", "Code review completed"] }
+          { title: "Chat History", items: [
+            { icon: "chat", label: "ManualMind UI direction", meta: "Today • 14 messages", children: ["Composer polish", "Model selector", "Sidebar build"] },
+            { icon: "chat", label: "RAG architecture notes", meta: "Yesterday • PDFs and retrieval", children: ["Upload flow", "Embeddings", "Source citations"] },
+            { icon: "chat", label: "Agent workflow planning", meta: "Mon • Automation ideas", children: ["Tool routing", "Memory plan", "User actions"] },
+            { icon: "chat", label: "Backend repair list", meta: "Last week • Missing modules", children: ["ingestion.py", "service.py", "chat_store.py"] }
           ] },
-          { title: "Other", items: [
-            { icon: "flag", label: "Priority tasks", children: ["High priority", "Blocked", "Waiting on review"] },
-            { icon: "archive", label: "Archived" }
+          { title: "Saved", items: [
+            { icon: "flag", label: "Pinned chats", meta: "Important threads", children: ["ManualMind product shape", "Deployment checklist"] },
+            { icon: "archive", label: "Archived chats", meta: "Older conversations" }
           ] }
         ]
       },
       projects: {
-        title: "Projects",
+        title: "Manuals",
         sections: [
-          { title: "Active Projects", items: [
-            { icon: "folder", label: "ManualMind", children: ["UI polish", "RAG backend", "Model routing"] },
-            { icon: "folder", label: "Client portal", children: ["Landing page", "Authentication"] }
+          { title: "Library", items: [
+            { icon: "folder", label: "Uploaded manuals", meta: "PDF source library", children: ["Product guides", "Troubleshooting docs", "Training packs"] },
+            { icon: "file", label: "Extraction queue", meta: "OCR and text parsing" }
           ] },
-          { title: "Other", items: [
-            { icon: "plus", label: "New project", action: true },
-            { icon: "archive", label: "Archived" }
+          { title: "Actions", items: [
+            { icon: "plus", label: "Upload manual", action: true },
+            { icon: "archive", label: "Removed sources" }
           ] }
         ]
       },
       calendar: {
-        title: "Calendar",
+        title: "Schedule",
         sections: [
-          { title: "Views", items: [
-            { icon: "calendar", label: "Month view" },
-            { icon: "clock", label: "Today's events", children: ["Team standup", "Project review", "Design sync"] }
+          { title: "Review Rhythm", items: [
+            { icon: "calendar", label: "Document refresh", meta: "Monthly reminder" },
+            { icon: "clock", label: "Recent review windows", children: ["Today: source check", "Friday: test upload", "Next week: model API"] }
           ] },
-          { title: "Quick Actions", items: [
-            { icon: "plus", label: "New event", action: true }
+          { title: "Actions", items: [
+            { icon: "plus", label: "Add reminder", action: true }
           ] }
         ]
       },
       teams: {
-        title: "Teams",
+        title: "People",
         sections: [
-          { title: "My Teams", items: [
-            { icon: "users", label: "Development team", children: ["Lead engineer", "Frontend", "Backend"] },
-            { icon: "users", label: "Design team", children: ["Product design", "Brand system"] }
+          { title: "Access", items: [
+            { icon: "users", label: "Workspace members", meta: "Who can use this bot", children: ["Admin", "Editor", "Viewer"] },
+            { icon: "plus", label: "Invite user", action: true }
           ] }
         ]
       },
       analytics: {
-        title: "Analytics",
+        title: "Insights",
         sections: [
-          { title: "Insights", items: [
-            { icon: "chart", label: "Performance report" },
-            { icon: "chart", label: "Task completion", children: ["Completed: 24", "Avg. completion: 2.5d", "Efficiency: 87%"] }
+          { title: "Signals", items: [
+            { icon: "chart", label: "Question trends", meta: "Most asked topics" },
+            { icon: "chart", label: "Retrieval quality", meta: "Confidence and source hits", children: ["Strong matches", "Weak matches", "No answer events"] }
+          ] }
+        ]
+      },
+      graphify: {
+        title: "Graphify",
+        sections: [
+          { title: "Knowledge Map", items: [
+            { icon: "graph", label: "Entity graph", meta: "Manuals, topics, parts" },
+            { icon: "graph", label: "Answer paths", meta: "How sources connect", children: ["Question node", "Retrieved chunk", "Generated answer"] },
+            { icon: "plus", label: "Create graph view", meta: "Coming soon", action: true }
           ] }
         ]
       },
@@ -1141,22 +1281,22 @@
         title: "Files",
         sections: [
           { title: "Quick Actions", items: [
-            { icon: "plus", label: "Upload file", action: true },
-            { icon: "folder", label: "New folder", action: true }
+            { icon: "plus", label: "Upload file", meta: "PDF, image, text", action: true },
+            { icon: "folder", label: "Create collection", action: true }
           ] },
-          { title: "Recent Files", items: [
-            { icon: "file", label: "Recent documents", children: ["Project proposal.pdf", "Meeting notes.docx", "Design specs.fig"] },
-            { icon: "folder", label: "Shared with me" }
+          { title: "Recent", items: [
+            { icon: "file", label: "Installation guide.pdf", meta: "Indexed 2 hours ago" },
+            { icon: "file", label: "Troubleshooting notes.docx", meta: "Waiting for parsing" }
           ] }
         ]
       },
       settings: {
         title: "Settings",
         sections: [
-          { title: "Account", items: [
-            { icon: "settings", label: "Profile settings" },
-            { icon: "settings", label: "Security" },
-            { icon: "settings", label: "Notifications" }
+          { title: "Control Room", items: [
+            { icon: "settings", label: "Model routing", meta: "Connect providers soon" },
+            { icon: "settings", label: "Retrieval settings", meta: "Similarity thresholds" },
+            { icon: "settings", label: "Notifications", meta: "Update banners and alerts" }
           ] }
         ]
       }
@@ -1168,12 +1308,15 @@
     const sidebarContent = document.getElementById("sidebarContent");
     const sidebarSearch = document.getElementById("sidebarSearch");
     const sidebarCollapse = document.getElementById("sidebarCollapse");
-    let activeSection = "tasks";
+    const sideTabsToggle = document.getElementById("sideTabsToggle");
+    const announcementCard = document.getElementById("announcementCard");
+    const dismissAnnouncement = document.getElementById("dismissAnnouncement");
+    let activeSection = "chats";
     let activeSidebarItem = "";
     const expandedSidebarItems = new Set();
 
     function renderSidebar() {
-      const data = sidebarData[activeSection] || sidebarData.tasks;
+      const data = sidebarData[activeSection] || sidebarData.chats;
       const query = sidebarSearch.value.trim().toLowerCase();
       sidebarTitle.textContent = data.title;
       railButtons.forEach((button) => button.classList.toggle("active", button.dataset.section === activeSection));
@@ -1182,7 +1325,8 @@
         const items = section.items.filter((item) => {
           if (!query) return true;
           const childMatch = (item.children || []).some((child) => child.toLowerCase().includes(query));
-          return item.label.toLowerCase().includes(query) || childMatch || section.title.toLowerCase().includes(query);
+          const metaMatch = (item.meta || "").toLowerCase().includes(query);
+          return item.label.toLowerCase().includes(query) || metaMatch || childMatch || section.title.toLowerCase().includes(query);
         });
         if (!items.length) return "";
 
@@ -1194,9 +1338,9 @@
           const submenu = hasChildren ? `<div class="submenu ${expanded ? "open" : ""}">${item.children.map((child) => `<button class="sidebar-subitem" type="button" data-child="${child}"><span class="item-label">${child}</span></button>`).join("")}</div>` : "";
           return `
             <div class="sidebar-row">
-              <button class="sidebar-item ${selected ? "selected" : ""} ${expanded ? "expanded" : ""}" type="button" data-key="${key}" data-dropdown="${hasChildren}">
+              <button class="sidebar-item ${selected ? "selected" : ""} ${expanded ? "expanded" : ""}" type="button" data-key="${key}" data-dropdown="${hasChildren}" data-label="${item.label}" data-action="${item.action ? "true" : "false"}">
                 ${iconSvg[item.icon] || iconSvg.file}
-                <span class="item-label">${item.label}</span>
+                <span class="item-label">${item.label}${item.meta ? `<span class="chat-meta">${item.meta}</span>` : ""}</span>
                 ${hasChildren ? iconSvg.chevron : ""}
               </button>
               ${submenu}
@@ -1213,7 +1357,19 @@
         button.addEventListener("click", () => {
           const key = button.dataset.key;
           const hasDropdown = button.dataset.dropdown === "true";
+          const label = button.dataset.label;
           activeSidebarItem = key;
+          if (button.dataset.action === "true" && label === "New chat") {
+            const history = sidebarData.chats.sections[1].items;
+            const count = history.length + 1;
+            history.unshift({
+              icon: "chat",
+              label: `Untitled chat ${count}`,
+              meta: "Just now • Draft",
+              children: ["New conversation started"]
+            });
+            activeSidebarItem = "chats-1-0";
+          }
           if (hasDropdown) {
             if (expandedSidebarItems.has(key)) expandedSidebarItems.delete(key);
             else expandedSidebarItems.add(key);
@@ -1242,9 +1398,27 @@
     });
 
     sidebarSearch.addEventListener("input", renderSidebar);
-    sidebarCollapse.addEventListener("click", () => sidebarShell.classList.toggle("collapsed"));
+    function toggleSidebarTabs() {
+      const collapsed = sidebarShell.classList.toggle("collapsed");
+      sideTabsToggle.setAttribute("aria-label", collapsed ? "Expand side tabs" : "Collapse side tabs");
+      sideTabsToggle.title = collapsed ? "Expand side tabs" : "Collapse side tabs";
+    }
+
+    sidebarCollapse.addEventListener("click", toggleSidebarTabs);
+    sideTabsToggle.addEventListener("click", toggleSidebarTabs);
+    announcementCard.addEventListener("click", () => announcementCard.classList.toggle("expanded"));
+    announcementCard.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        announcementCard.classList.toggle("expanded");
+      }
+    });
+    dismissAnnouncement.addEventListener("click", (event) => {
+      event.stopPropagation();
+      announcementCard.style.display = "none";
+    });
     document.querySelector(".footer-more").addEventListener("click", (event) => {
-      event.currentTarget.textContent = event.currentTarget.textContent === "..." ? "✓" : "...";
+      event.currentTarget.textContent = event.currentTarget.textContent === "..." ? "Done" : "...";
     });
 
     renderSidebar();
